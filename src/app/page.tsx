@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ModeToggle } from "@/components/ModeToggle";
 
 export default function Home() {
   return (
@@ -57,6 +58,23 @@ export default function Home() {
             rel="noopener noreferrer"
           >
             Documentation
+          </a>
+          <ModeToggle />
+        </div>
+        <div className="mt-16 flex w-full max-w-3xl items-center justify-center gap-6 sm:justify-start">
+          <a
+            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src="/vercel.svg"
+              alt="Vercel Logo"
+              className="dark:invert"
+              width={100}
+              height={24}
+              priority
+            />
           </a>
         </div>
       </main>
