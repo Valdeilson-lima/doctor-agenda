@@ -5,7 +5,7 @@ import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 
 export const usersTable = pgTable("users", {
-  id: text("user_id").primaryKey(),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),

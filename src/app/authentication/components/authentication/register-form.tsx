@@ -1,9 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "../../../../components/ui/button";
@@ -23,6 +25,8 @@ const registerFormSchema = z.object({
 
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -37,13 +41,28 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
-    await authClient.signUp.email({
+  const onSubmit = async (data: z.output<typeof registerFormSchema>) => {
+    setIsLoading(true);
+    const { error } = await authClient.signUp.email({
       name: data.name,
       email: data.email,
       password: data.password,
-      callbackURL: "dashboard",
+      callbackURL: "/dashboard",
     });
+    if (error) {
+      if (error.code === "USER_ALREADY_EXISTS") {
+        toast.error("Este e-mail já está cadastrado.");
+      } else if (error.code === "PASSWORD_TOO_SHORT") {
+        toast.error("A senha deve ter no mínimo 6 caracteres.");
+      } else {
+        toast.error(error.message ?? "Erro ao criar conta.");
+      }
+    } else {
+      toast.success("Conta criada com sucesso!");
+      await new Promise((r) => setTimeout(r, 1500));
+      router.push("/dashboard");
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -115,8 +134,19 @@ const RegisterForm = () => {
           </p>
         )}
       </div>
-      <Button type="submit" className="w-full cursor-pointer">
-        Criar Conta
+      <Button
+        type="submit"
+        className="w-full cursor-pointer"
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 size-4 animate-spin" />
+            Criando...
+          </>
+        ) : (
+          "Criar Conta"
+        )}
       </Button>
     </form>
   );

@@ -1,7 +1,10 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+
 import { CalendarCheck, Clock, HeartPulse, ShieldCheck } from "lucide-react";
 
-import RegisterForm from "@/app/authentication/components/euthentication/register-form";
-import { ModeToggle } from "@/components/ModeToggle";
+import RegisterForm from "@/app/authentication/components/authentication/register-form";
 import {
   Card,
   CardContent,
@@ -10,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LoginForm from "@/app/authentication/components/euthentication/login-form";
+import LoginForm from "@/app/authentication/components/authentication/login-form";
 
 const features = [
   { icon: CalendarCheck, text: "Agende consultas em segundos" },
@@ -18,7 +21,14 @@ const features = [
   { icon: ShieldCheck, text: "Dados seguros e protegidos" },
 ];
 
-const AuthenticationPage = () => {
+const AuthenticationPage = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
     <div className="from-background via-background to-primary/5 relative flex min-h-svh w-full items-center justify-center overflow-hidden bg-linear-to-br p-4 md:p-8">
       {/* Background decoration */}
@@ -26,9 +36,9 @@ const AuthenticationPage = () => {
       <div className="bg-primary/10 absolute -bottom-40 -left-40 size-125 animate-[float_10s_ease-in-out_infinite_reverse] rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 hidden h-px w-3/4 -translate-x-1/2 -translate-y-1/2 -rotate-6 opacity-[0.03] md:block" />
 
-      <div className=" relative z-10 flex w-full flex-col items-center justify-center gap-6 md:flex-row md:gap-16">
+      <div className="relative z-10 flex w-full flex-col items-center justify-center gap-6 md:flex-row md:gap-16">
         {/* Welcome panel */}
-        <div className="from-primary to-primary/80 text-primary-foreground  w-full max-w-md flex-col items-center gap-6 rounded-2xl bg-linear-to-br p-6 shadow-2xl sm:p-8 hidden md:flex">
+        <div className="from-primary to-primary/80 text-primary-foreground hidden w-full max-w-md flex-col items-center gap-6 rounded-2xl bg-linear-to-br p-6 shadow-2xl sm:p-8 md:flex">
           <div className="animate-[pulse-ring_3s_ease-in-out_infinite] rounded-full bg-white/15 p-3 backdrop-blur-sm sm:p-4">
             <HeartPulse className="size-10 sm:size-12" />
           </div>

@@ -1,24 +1,29 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 const loginFormSchema = z.object({
-  email: z.email({ message: "E-mail inválido." }),
+  email: z.string().email("E-mail inválido."),
   password: z
     .string()
-    .min(6, { message: "A senha deve ter no mínimo 6 caracteres." }),
+    .min(6, "A senha deve ter no mínimo 6 caracteres."),
 });
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -32,8 +37,26 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: z.output<typeof loginFormSchema>) => {
+    setIsLoading(true);
+    const { error } = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      callbackURL: "/dashboard",
+    });
+
+    if (error) {
+      if (error.code === "INVALID_EMAIL_OR_PASSWORD") {
+        toast.error("E-mail ou senha incorretos.");
+      } else {
+        toast.error(error.message ?? "E-mail ou senha incorretos.");
+      }
+    } else {
+      toast.success("Login realizado com sucesso!");
+      await new Promise((r) => setTimeout(r, 1500));
+      router.push("/dashboard");
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -98,8 +121,19 @@ const LoginForm = () => {
           Esqueceu a senha?
         </a>
       </div>
-      <Button type="submit" className="w-full cursor-pointer">
-        Entrar
+      <Button
+        type="submit"
+        className="w-full cursor-pointer"
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 size-4 animate-spin" />
+            Entrando...
+          </>
+        ) : (
+          "Entrar"
+        )}
       </Button>
     </form>
   );
