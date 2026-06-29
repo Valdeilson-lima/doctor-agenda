@@ -9,6 +9,7 @@ import * as z from "zod";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 const registerFormSchema = z.object({
   name: z
@@ -36,8 +37,13 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
+    await authClient.signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      callbackURL: "dashboard",
+    });
   };
 
   return (
@@ -87,7 +93,7 @@ const RegisterForm = () => {
           <Input
             {...register("password")}
             type={showPassword ? "text" : "password"}
-            className="h-10 pl-9 pr-9 md:h-8"
+            className="h-10 pr-9 pl-9 md:h-8"
             placeholder="••••••••"
           />
           <button
