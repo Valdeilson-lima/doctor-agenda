@@ -27,11 +27,22 @@ export const auth = betterAuth({
   },
   account: {
     modelName: "accountsTable",
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google", "email-password"],
+    },
   },
   verification: {
     modelName: "verificationsTable",
   },
   emailAndPassword: {
     enabled: true,
+  },
+  baseURL: process.env.BETTER_AUTH_URL,
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
   },
 });

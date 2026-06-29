@@ -3,11 +3,16 @@
 import db from "@/db";
 import { clinicTable, usersToClinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-export async function createClinic(_prevState: unknown, formData: FormData) {
+const clinicSchema = z.object({
+  name: z.string().trim().min(1, "O nome da clínica é obrigatório."),
+});
+
+export async function createClinic(payload: { name: string }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -16,15 +21,17 @@ export async function createClinic(_prevState: unknown, formData: FormData) {
     return { error: "Usuário não autenticado." };
   }
 
-  const name = formData.get("name") as string;
+  const parsed = clinicSchema.safeParse(payload);
 
-  if (!name || name.trim().length === 0) {
-    return { error: "O nome da clínica é obrigatório." };
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0].message };
   }
+
+  const { name } = parsed.data;
 
   const [clinic] = await db
     .insert(clinicTable)
-    .values({ name: name.trim() })
+    .values({ name })
     .returning({ id: clinicTable.id });
 
   await db.insert(usersToClinicsTable).values({

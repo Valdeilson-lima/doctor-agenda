@@ -1,4 +1,4 @@
-import { ClinicForm } from "./clinic-form";
+import { ClinicForm } from "./components/clinic-form";
 
 const ClinicFormPage = () => {
   return <ClinicForm />;
