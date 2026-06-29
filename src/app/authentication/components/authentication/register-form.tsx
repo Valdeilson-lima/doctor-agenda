@@ -17,7 +17,7 @@ const registerFormSchema = z.object({
   name: z
     .string()
     .min(2, { message: "O nome deve ter no mínimo 2 caracteres." }),
-  email: z.email({ message: "E-mail inválido." }),
+  email: z.string().email({ message: "E-mail inválido." }),
   password: z
     .string()
     .min(6, { message: "A senha deve ter no mínimo 6 caracteres." }),
@@ -66,59 +66,59 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4.5">
       <div>
-        <Label htmlFor="name" className="text-sm font-medium">
+        <Label htmlFor="name" className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">
           Nome
         </Label>
         <div className="relative mt-1.5">
-          <User className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <User className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 transition-colors group-focus-within:text-primary" />
           <Input
             {...register("name")}
-            className="h-10 pl-9 md:h-8"
+            className="h-11 pl-10 md:h-11 placeholder:text-muted-foreground/60 transition-all rounded-xl border-border/80 focus-visible:ring-primary/15"
             type="text"
             placeholder="Seu nome completo"
           />
         </div>
         {errors.name && (
-          <p className="text-destructive mt-1 text-xs">{errors.name.message}</p>
+          <p className="text-destructive mt-1.5 text-xs font-medium">{errors.name.message}</p>
         )}
       </div>
       <div>
-        <Label htmlFor="email" className="text-sm font-medium">
+        <Label htmlFor="email" className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">
           E-mail
         </Label>
         <div className="relative mt-1.5">
-          <Mail className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <Mail className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 transition-colors group-focus-within:text-primary" />
           <Input
             {...register("email")}
-            className="h-10 pl-9 md:h-8"
+            className="h-11 pl-10 md:h-11 placeholder:text-muted-foreground/60 transition-all rounded-xl border-border/80 focus-visible:ring-primary/15"
             type="email"
             placeholder="seu@email.com"
           />
         </div>
         {errors.email && (
-          <p className="text-destructive mt-1 text-xs">
+          <p className="text-destructive mt-1.5 text-xs font-medium">
             {errors.email.message}
           </p>
         )}
       </div>
       <div>
-        <Label htmlFor="password" className="text-sm font-medium">
+        <Label htmlFor="password" className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">
           Senha
         </Label>
         <div className="relative mt-1.5">
-          <Lock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <Lock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 transition-colors group-focus-within:text-primary" />
           <Input
             {...register("password")}
             type={showPassword ? "text" : "password"}
-            className="h-10 pr-9 pl-9 md:h-8"
+            className="h-11 pr-10 pl-10 md:h-11 placeholder:text-muted-foreground/60 transition-all rounded-xl border-border/80 focus-visible:ring-primary/15"
             placeholder="••••••••"
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md transition-colors"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 flex size-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md transition-colors"
             tabIndex={-1}
           >
             {showPassword ? (
@@ -129,14 +129,14 @@ const RegisterForm = () => {
           </button>
         </div>
         {errors.password && (
-          <p className="text-destructive mt-1 text-xs">
+          <p className="text-destructive mt-1.5 text-xs font-medium">
             {errors.password.message}
           </p>
         )}
       </div>
       <Button
         type="submit"
-        className="w-full cursor-pointer"
+        className="w-full cursor-pointer h-11 font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] rounded-xl bg-primary text-primary-foreground mt-2"
         disabled={isLoading}
       >
         {isLoading ? (

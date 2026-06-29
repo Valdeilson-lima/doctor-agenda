@@ -60,42 +60,42 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4.5">
       <div>
-        <Label htmlFor="email" className="text-sm font-medium">
+        <Label htmlFor="email" className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">
           E-mail
         </Label>
         <div className="relative mt-1.5">
-          <Mail className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <Mail className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 transition-colors group-focus-within:text-primary" />
           <Input
             {...register("email")}
-            className="h-10 pl-9 md:h-8"
+            className="h-11 pl-10 md:h-11 placeholder:text-muted-foreground/60 transition-all rounded-xl border-border/80 focus-visible:ring-primary/15"
             type="email"
             placeholder="seu@email.com"
           />
         </div>
         {errors.email && (
-          <p className="text-destructive mt-1 text-xs">
+          <p className="text-destructive mt-1.5 text-xs font-medium">
             {errors.email.message}
           </p>
         )}
       </div>
       <div>
-        <Label htmlFor="password" className="text-sm font-medium">
+        <Label htmlFor="password" className="text-xs font-semibold text-foreground/80 uppercase tracking-wider">
           Senha
         </Label>
         <div className="relative mt-1.5">
-          <Lock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <Lock className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 transition-colors group-focus-within:text-primary" />
           <Input
             {...register("password")}
             type={showPassword ? "text" : "password"}
-            className="h-10 pl-9 pr-9 md:h-8"
+            className="h-11 pl-10 pr-10 md:h-11 placeholder:text-muted-foreground/60 transition-all rounded-xl border-border/80 focus-visible:ring-primary/15"
             placeholder="••••••••"
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md transition-colors"
+            className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 flex size-7 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md transition-colors"
             tabIndex={-1}
           >
             {showPassword ? (
@@ -106,7 +106,7 @@ const LoginForm = () => {
           </button>
         </div>
         {errors.password && (
-          <p className="text-destructive mt-1 text-xs">
+          <p className="text-destructive mt-1.5 text-xs font-medium">
             {errors.password.message}
           </p>
         )}
@@ -115,7 +115,7 @@ const LoginForm = () => {
         <a
           href="#"
           tabIndex={-1}
-          className="text-muted-foreground hover:text-foreground text-xs underline-offset-2 hover:underline"
+          className="text-muted-foreground hover:text-primary text-xs underline-offset-4 hover:underline transition-colors font-medium"
           onClick={(e) => e.preventDefault()}
         >
           Esqueceu a senha?
@@ -123,7 +123,7 @@ const LoginForm = () => {
       </div>
       <Button
         type="submit"
-        className="w-full cursor-pointer"
+        className="w-full cursor-pointer h-11 font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98] rounded-xl bg-primary text-primary-foreground"
         disabled={isLoading}
       >
         {isLoading ? (
@@ -132,7 +132,7 @@ const LoginForm = () => {
             Entrando...
           </>
         ) : (
-          "Entrar"
+          "Entrar na Conta"
         )}
       </Button>
     </form>

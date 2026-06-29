@@ -78,6 +78,8 @@ export const verificationsTable = pgTable(
 
 export const usersTableRelations = relations(usersTable, ({ many }) => ({
   clinics: many(usersToClinicsTable),
+  sessions: many(sessionsTable),
+  accounts: many(accountsTable),
 }));
 
 export const clinicTable = pgTable("clinic", {
@@ -88,11 +90,6 @@ export const clinicTable = pgTable("clinic", {
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
-
-export const userRelations = relations(usersTable, ({ many }) => ({
-  sessions: many(sessionsTable),
-  accounts: many(accountsTable),
-}));
 
 export const sessionRelations = relations(sessionsTable, ({ one }) => ({
   user: one(usersTable, {
